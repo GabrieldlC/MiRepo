@@ -6,9 +6,9 @@ public class Coin {
     private double price;
     private int decimals;
 
-    public Coin(String tiker, double precio, int decimals) {
+    public Coin(String tiker, double price, int decimals) {
         this.tiker = tiker;
-        this.price = precio;
+        this.price = price;
         this.decimals = decimals;
     }
 
