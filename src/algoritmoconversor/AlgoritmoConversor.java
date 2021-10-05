@@ -6,7 +6,7 @@ public class AlgoritmoConversor {
         Controlador conversor = new Controlador();
 
         double ars = 100000;
-        String token = "ada";
+        String token = "usdt";
 
         try {
             double valor = conversor.valorEnCripto(ars, token);

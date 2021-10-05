@@ -3,6 +3,7 @@ package algoritmoconversor;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class Controlador {
 
@@ -22,18 +23,27 @@ public class Controlador {
     }
 
     public double valorEnCripto(double ars, String token) {
-        Coin myCoin = tokens.stream().filter(x -> x.getTiker().equals(token.toUpperCase())).findFirst().get();
-        
-        if (ars < 0) {
-            throw new IndexOutOfBoundsException("El monto ingresado debe ser mayor o igual a 0");
+        Coin myCoin;
+
+        try {
+            myCoin = tokens.stream().filter(x -> x.getTiker().equals(token.toUpperCase())).findFirst().get();
+
+            if (ars < 0) {
+                throw new IndexOutOfBoundsException("El monto ingresado debe ser mayor o igual a 0");
+            }
+
+            return limitDecimals(ars / myCoin.getPrice(), myCoin.getDecimals());
+        } catch (NoSuchElementException e) {
+            throw new IllegalArgumentException("El token ingresado no existe");
+        } catch (Exception e) {
+            throw new RuntimeException("Error inesperado");
         }
 
-        return limitDecimals(ars / myCoin.getPrice(), myCoin.getDecimals());
     }
-    
+
     public double limitDecimals(double number, int decimals) {
         BigDecimal bd = new BigDecimal(number).setScale(decimals, RoundingMode.HALF_UP);
-        
+
         return bd.doubleValue();
     }
 
