@@ -1,44 +1,50 @@
 package algoritmoconversor;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class Controlador {
+
     private ArrayList<Coin> tokens;
 
     public Controlador() {
         tokens = new ArrayList<>();
-    }
-    
-    public void agregarToken(String tiker, double precio) {
-        tokens.add(new Coin(tiker, precio));
-    }
-    
-    public double valorEnCripto(double ars, String token) {
-        Coin usado = buscarToken(token);
-        
-        if (usado == null) {
-            throw new IllegalArgumentException("El token buscado no existe");
-        }
-        if (ars < 0) {
-            throw new IndexOutOfBoundsException("El monto ingresado debe ser mayor o igual a 0");
-        }
-        
-        return ars / usado.getPrecio();
+        agregarToken("USDT", 190, 2);
+        agregarToken("BTC", 8000000, 8);
+        agregarToken("ETH", 550000, 5);
+        agregarToken("ADA", 390, 3);
+        agregarToken("BNB", 64000, 4);
     }
 
-    private Coin buscarToken(String token) {
-        Coin buscado = null;
-        
-        int i = 0;
-        
-        while (buscado == null && i < tokens.size()) {   
-            if (token.equals(tokens.get(i).getTiker())) {
-                buscado = tokens.get(i);
-            }
-            
-            i++;
-        }
-        
-        return buscado;
+    private void agregarToken(String tiker, double price, int decimals) {
+        tokens.add(new Coin(tiker, price, decimals));
     }
+
+    public double valorEnCripto(double ars, String token) {
+        Coin myCoin;
+
+        try {
+            myCoin = tokens.stream().filter(x -> x.getTiker().equals(token.toUpperCase())).findFirst().get();
+
+            if (ars < 0) {
+                throw new IndexOutOfBoundsException("El monto ingresado debe ser mayor o igual a 0");
+            }
+
+            return limitDecimals(ars / myCoin.getPrice(), myCoin.getDecimals());
+        } catch (NoSuchElementException e) {
+            throw new IllegalArgumentException("El token ingresado no existe");
+        } catch (Exception e) {
+            throw new RuntimeException("Error inesperado");
+        }
+
+    }
+
+    public double limitDecimals(double number, int decimals) {
+        BigDecimal bd = new BigDecimal(number).setScale(decimals, RoundingMode.HALF_UP);
+
+        return bd.doubleValue();
+    }
+
 }

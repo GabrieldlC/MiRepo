@@ -3,18 +3,24 @@ package algoritmoconversor;
 public class Coin {
     
     private String tiker;
-    private double precio;
+    private double price;
+    private int decimals;
 
-    public Coin(String tiker, double precio) {
+    public Coin(String tiker, double price, int decimals) {
         this.tiker = tiker;
-        this.precio = precio;
+        this.price = price;
+        this.decimals = decimals;
     }
 
     public String getTiker() {
         return tiker;
     }
 
-    public double getPrecio() {
-        return precio;
+    public double getPrice() {
+        return price;
+    }
+
+    public int getDecimals() {
+        return this.decimals;
     }
 }
