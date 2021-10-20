@@ -1,4 +1,4 @@
-package algoritmoconversor;
+package com.gabrieldlc.cryptoproject.dto;
 
 public class Coin {
     

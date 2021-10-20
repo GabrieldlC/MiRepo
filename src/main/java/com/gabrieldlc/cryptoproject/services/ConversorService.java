@@ -1,15 +1,17 @@
-package algoritmoconversor;
+package com.gabrieldlc.cryptoproject.services;
+
+import com.gabrieldlc.cryptoproject.dto.Coin;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-public class Controlador {
+public class ConversorService {
 
     private ArrayList<Coin> tokens;
 
-    public Controlador() {
+    public ConversorService() {
         tokens = new ArrayList<>();
         agregarToken("USDT", 190, 2);
         agregarToken("BTC", 8000000, 8);
